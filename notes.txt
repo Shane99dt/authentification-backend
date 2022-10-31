@@ -1,0 +1,47 @@
+DB_HOST = host url
+DB_NAME = database name
+DB_PASSWORD = database password
+DB_USERNAME = database username
+
+
+////////////////////////////
+Routes
+////////////////////////////
+1. Login
+    ->form
+      ->email
+      ->password
+      ->submit
+
+2. Homepage
+    ->toutes les annonces
+
+3. Create user
+    ->form
+        ->email
+        ->password
+        ->password validation
+        ->submit
+
+4. Edit user
+    ->form
+        ->email
+        ->password
+        ->password validation
+        ->submit
+
+5. Create annonce
+    ->form
+      ->title
+      ->prix
+      ->pictures
+      ->description
+
+6. Annonce
+    ->form
+      ->message
+        ->date
+        ->id de vendeur
+        ->message
+
+    ->info d'annonce

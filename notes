@@ -1,4 +1,0 @@
-DB_HOST = host url
-DB_NAME = database name
-DB_PASSWORD = database password
-DB_USERNAME = database username
