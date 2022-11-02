@@ -25,6 +25,7 @@ const Picture = require('./picture')(sequelize)
 const User = require('./user')(sequelize)
 sequelize.sync({ alter: true })
 
+
 const db = {
   sequelize,
   Product,
