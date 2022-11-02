@@ -20,11 +20,17 @@ const connectDB = async () => {
 connectDB()
 
 const Product = require('./product')(sequelize)
+const Message = require('./message')(sequelize)
+const Picture = require('./picture')(sequelize)
+const User = require('./user')(sequelize)
 sequelize.sync({ alter: true })
 
 const db = {
   sequelize,
-  Product
+  Product,
+  Message,
+  Picture,
+  User
 }
 
 module.exports = db
