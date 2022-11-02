@@ -30,6 +30,8 @@ Routes
         ->password validation
         ->submit
 
+USER.JS =>> edit, create
+
 5. Create annonce
     ->form
       ->title
@@ -45,3 +47,13 @@ Routes
         ->message
 
     ->info d'annonce
+
+///////////////////////////////////
+Models
+///////////////////////////////////
+1. Product
+2. user
+3. Picture
+4. message
+
+INSTALL MYSQL2
