@@ -9,6 +9,15 @@ module.exports = (sequelize) => {
     date: {
       type: DataTypes.DATE,
     },
+    senderId: {
+      type: DataTypes.INTEGER,
+    },
+    receiverId: {
+      type: DataTypes.INTEGER,
+    },
+    productId: {
+      type: DataTypes.INTEGER,
+    },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: sequelize.literal("CURRENT_TIMESTAMP"),

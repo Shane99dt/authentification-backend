@@ -48,7 +48,7 @@ app.post('/login', async (req, res) => {
     res.status(404).json([{msg : "Not found"}])
   } else {
     const validPassword = await bcrypt.compare(password, user.password)
-
+    console.log(user)
     if (validPassword) {
       const token = issueToken({ id: user.id, email: user.email })
 

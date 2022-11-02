@@ -31,21 +31,6 @@ User.belongsToMany(Product, {
   through: "products_users"
 })
 
-Message.belongsToMany(User, {
-  through: "users_messages"
-})
-User.belongsToMany(Message, {
-  through: "users_messages"
-})
-
-Message.belongsToMany(Product, {
-  through: "products_messages"
-})
-Product.belongsToMany(Message, {
-  through: "products_messages"
-})
-
-
 sequelize.sync({ alter: true })
 
 const db = {
