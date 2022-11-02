@@ -20,3 +20,10 @@ const connectDB = async () => {
 connectDB()
 
 const Product = require('./product')(sequelize)
+
+const db = {
+  sequelize,
+  Product
+}
+
+module.exports = db
