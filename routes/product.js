@@ -5,7 +5,7 @@ const { Product } = require("../models")
 // app.get('/', async (req, res) => {
 //   // res.json("product")
 //   try {
-//     let 
+//     let
 //   }
 // })
 
