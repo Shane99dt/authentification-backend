@@ -20,6 +20,7 @@ const connectDB = async () => {
 connectDB()
 
 const Product = require('./product')(sequelize)
+sequelize.sync({ alter: true })
 
 const db = {
   sequelize,
