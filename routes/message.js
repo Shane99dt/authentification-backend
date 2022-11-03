@@ -3,6 +3,8 @@ const app = express()
 const { body, validationResult } = require("express-validator")
 const { Message, Product, User } = require("../models")
 const moment = require("moment")
+// const passport = require("../config/passport")
+const { checkIfProductExists } = require("../middlewares/product")
 
 app.post(
   "/:productId",
@@ -45,35 +47,58 @@ app.post(
   }
 )
 
-app.get("/:id", async (req, res) => {
-  /**
-   * messages -> productId
-   * messages -> senderId
-   * product receives many messages from different users
-   * need to get all the messages according to the same user to a specific announe
-   *
-   * how to do that
-   *
-   * need to select the messages with a user and the product id
-   *
-   * if we send the productId with the params
-   * it will let us get the every message that came to the product and it will definetely not help us
-   * but we can divide all the messages by the sender id
-   * kinda complicated but thats a way to do that
-   *
-   * if we send the senderId with the params
-   * we can get all the messages sent by that sender
-   *
-   */
+app.post(
+  "/:id",
+  // passport.authenticate("jwt"),
+  body("description")
+    .exists()
+    .isLength({ min: 8 })
+    .withMessage("Content is require"),
+  checkIfProductExists,
+  async (req, res) => {
+    /**
+     * messages -> productId
+     * messages -> senderId
+     * product receives many messages from different users
+     * need to get all the messages according to the same user to a specific announe
+     *
+     * how to do that
+     *
+     * need to select the messages with a user and the product id
+     *
+     * if we send the productId with the params
+     * it will let us get the every message that came to the product and it will definetely not help us
+     * but we can divide all the messages by the sender id
+     * kinda complicated but thats a way to do that
+     *
+     * if we send the senderId with the params
+     * we can get all the messages sent by that sender
+     *
+     */
 
-  const { id } = req.params
-  const message = await Message.findOne({
-    where: {
-      id,
-    },
-  })
+    const { description } = req.body
+    const product = Product.findOne({
+      where: {
+        id: req.params.id,
+      },
+    })
 
-  res.status(201).json(message)
-})
+    const message = await Message.create({
+      description,
+      senderId: req.user.id,
+      receiverId: product.user.id,
+      productId: req.params.id,
+    })
+
+    res.json(message)
+    // const { id } = req.params
+    // const message = await Message.findOne({
+    //   where: {
+    //     id,
+    //   },
+    // })
+    // res.status(201).json(message)
+  }
+)
 
 module.exports = app
