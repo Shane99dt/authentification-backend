@@ -74,6 +74,7 @@ app.post(
 app.put(
   "/:productId",
   passport.authenticate("jwt"),
+  checkIfProductExists,
   body("productName")
     .custom((value) => {
       if (!value) {
@@ -101,7 +102,6 @@ app.put(
       }
     })
     .withMessage("Price cannot be empty"),
-  checkIfProductExists,
   async (req, res) => {
     const { errors } = validationResult(req)
     const product = req.product
@@ -116,53 +116,10 @@ app.put(
   }
 )
 
-/*
- * Messages
- */
-
-// Post a message
-// app.post(
-//   "/:productId/message",
-//   body("description")
-//     .isLength({ min: 1 })
-//     .withMessage("Message cannot be empty")
-//     .isLength({ max: 200 })
-//     .withMessage("Message is too long"),
-//   async (req, res) => {
-//     const { productId } = req.params
-//     const { errors } = validationResult(req)
-
-//     // const product = await Product.findOne({
-//     //   where: {
-//     //     id: productId
-//     //   },
-//     //   include : [User]
-//     // })
-//     const { description, receiverId, senderId } = req.body
-
-//     /**
-//      * need to get the sender id which is the user
-//      *
-//      * the way to do that is to get the token and find a way to decrypt it
-//      * get the id which is encrypted inside the token and its ready
-//      */
-
-//     if (errors.length === 0) {
-//       const message = await Message.create({
-//         description,
-//         date: moment().format(),
-//         receiverId,
-//         senderId,
-//         productId,
-//       })
-//       res.json(message)
-//     } else {
-//       res.status(400).json(errors)
-//     }
-//   }
-// )
-
 /**
+ * Messages
+ *
+ *
  * Get all the messages came to the product from different users
  */
 
