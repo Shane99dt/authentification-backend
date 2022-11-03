@@ -29,17 +29,16 @@ app.get("/", async (req, res) => {
 
 /**
  * create a product
- * edit a product
  */
 
 app.post(
   "/",
   body("productName")
     .isLength({ min: 4 })
-    .withMessage("Title must be longer than 4 characters")
+    .withMessage("Title is too short")
     .isLength({ max: 30 })
     .withMessage("Title must be less than 30 characters"),
-  body("productPrice").exists().withMessage("Price cannot be empty"),
+  body("productPrice").exists().isInt().withMessage("Price cannot be empty"),
   body("productDescription")
     .isLength({ min: 10 })
     .withMessage("Description is too short")
@@ -56,7 +55,55 @@ app.post(
         productDescription,
       })
 
-      res.json(product)
+      res.status(201).json(product)
+    } else {
+      res.status(400).json(errors)
+    }
+  }
+)
+
+/**
+ * Edit a product
+ */
+
+app.put(
+  "/:productId",
+  body("productName")
+    .custom((value) => {
+      if (!value) {
+        return true
+      } else {
+        return value.length >= 4 && value.length <= 30
+      }
+    })
+    .withMessage("Title must be between 10 & 30 characters"),
+  body("productDescription")
+    .custom((value) => {
+      if (!value) {
+        return true
+      } else {
+        return value.length >= 10 && value.length <= 300
+      }
+    })
+    .withMessage("Description must be between 10 & 300 characters"),
+  body("productPrice")
+    .custom((value) => {
+      if (!value) {
+        return true
+      } else {
+        return value.length > 1
+      }
+    })
+    .withMessage("Price cannot be empty"),
+  checkIfProductExists,
+  async (req, res) => {
+    const { errors } = validationResult(req)
+    const product = req.product
+
+    if (errors.length === 0) {
+      await product.update({ ...product, ...req.body })
+      await product.save()
+      res.status(201).json(product)
     } else {
       res.status(400).json(errors)
     }
