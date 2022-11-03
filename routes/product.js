@@ -57,6 +57,7 @@ app.post(
         productName,
         productPrice,
         productDescription,
+        UserId: req.user.id,
       })
 
       res.status(201).json(product)

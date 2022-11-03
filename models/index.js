@@ -23,12 +23,17 @@ const Message = require("./message")(sequelize)
 const Picture = require("./picture")(sequelize)
 const User = require("./user")(sequelize)
 
-Product.belongsToMany(User, {
-  through: "products_users",
-})
-User.belongsToMany(Product, {
-  through: "products_users",
-})
+Message.belongsTo(Product)
+Message.belongsTo(User, { as: "sender" })
+Message.belongsTo(User, { as: "receiver" })
+Product.belongsTo(User)
+Picture.belongsTo(Product)
+Picture.belongsTo(User)
+
+User.hasMany(Product)
+User.hasOne(Picture)
+Product.hasMany(Picture)
+Product.hasMany(Message)
 
 sequelize.sync({ alter: true })
 
