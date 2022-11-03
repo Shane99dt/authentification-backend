@@ -3,8 +3,6 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const session = require('express-session')
-const morgan = require('morgan')
-// const port = 5000
 const { PORT } = process.env
 const productRoutes = require('./routes/product')
 const userRoutes = require('./routes/user')
@@ -14,8 +12,7 @@ require('./models/index')
 
 app.use(cors())
 app.use(express.json())
-// app.use('/product', productRoutes)
-// app.use('/user', userRoutes)
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -26,6 +23,8 @@ app.use(
 
 app.use('/auth', authRoutes)
 app.use('/message', messageRoutes)
+app.use('/product', productRoutes)
+app.use('/user', userRoutes)
 
 app.listen(PORT, ()=> {
   console.log(`Server running on port ${PORT}`)
