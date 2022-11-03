@@ -1,12 +1,18 @@
-const express = require('express')
+const express = require("express")
 const app = express()
-const { body, validationResult } = require('express-validator')
-const { Message, Product, User } = require('../models')
-const moment = require('moment')
+const { body, validationResult } = require("express-validator")
+const { Message, Product, User } = require("../models")
+const passport = require("../config/passport")
+const moment = require("moment")
 
-app.post('/:productId',
-  body("description").isLength({ min: 1 }).withMessage("Message cannot be empty").isLength({ max: 200 }).withMessage("Message is too long"),
-  async (req, res) =>{
+app.post(
+  "/:productId",
+  body("description")
+    .isLength({ min: 1 })
+    .withMessage("Message cannot be empty")
+    .isLength({ max: 200 })
+    .withMessage("Message is too long"),
+  async (req, res) => {
     const { productId } = req.params
     const { errors } = validationResult(req)
 
@@ -19,55 +25,53 @@ app.post('/:productId',
     const { description, receiverId, senderId } = req.body
 
     /**
-    * need to get the sender id which is the user
-    *
-    * the way to do that is to get the token and find a way to decrypt it
-    * get the id which is encrypted inside the token and its ready
-    */
+     * need to get the sender id which is the user
+     *
+     * the way to do that is to get the token and find a way to decrypt it
+     * get the id which is encrypted inside the token and its ready
+     */
 
-    if(errors.length === 0){
+    if (errors.length === 0) {
       const message = await Message.create({
         description,
         date: moment().format(),
         receiverId,
         senderId,
-        productId
+        productId,
       })
       res.json(message)
-    }else{
+    } else {
       res.status(400).json(errors)
     }
-})
+  }
+)
 
-app.get('/:id', async (req, res) => {
-
+app.get("/:id", async (req, res) => {
   /**
-  * messages -> productId
-  * messages -> senderId
-  * product receives many messages from different users
-  * need to get all the messages according to the same user to a specific announe
-  *
-  * how to do that
-  *
-  * need to select the messages with a user and the product id
-  *
-  * if we send the productId with the params
-  * it will let us get the every message that came to the product and it will definetely not help us
-  * but we can divide all the messages by the sender id
-  * kinda complicated but thats a way to do that
-  *
-  * if we send the senderId with the params
-  * we can get all the messages sent by that sender
-  *
-  */
-
-
+   * messages -> productId
+   * messages -> senderId
+   * product receives many messages from different users
+   * need to get all the messages according to the same user to a specific announe
+   *
+   * how to do that
+   *
+   * need to select the messages with a user and the product id
+   *
+   * if we send the productId with the params
+   * it will let us get the every message that came to the product and it will definetely not help us
+   * but we can divide all the messages by the sender id
+   * kinda complicated but thats a way to do that
+   *
+   * if we send the senderId with the params
+   * we can get all the messages sent by that sender
+   *
+   */
 
   const { id } = req.params
   const message = await Message.findOne({
     where: {
-      id
-    }
+      id,
+    },
   })
 
   res.status(201).json(message)
