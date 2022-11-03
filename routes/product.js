@@ -1,8 +1,8 @@
-const express = require('express')
-const { checkIfProductExists } = require('../middlewares/product')
+const express = require("express")
+const { checkIfProductExists } = require("../middlewares/product")
 const app = express()
 const { Product } = require("../models")
-
+const { body, validationResult } = require("express-validator")
 
 /**
  * need two different get methods
@@ -11,20 +11,56 @@ const { Product } = require("../models")
  * show one product
  */
 
-app.get('/:productId', checkIfProductExists, (req, res) => {
+app.get("/:productId", checkIfProductExists, (req, res) => {
   res.status(201).json(req.product)
 })
 
-app.get('/', async (req, res) => {
+app.get("/", async (req, res) => {
   try {
     /**
      * If want, can add the query, to get in the price order
      */
     const products = await Product.findAll()
     res.status(201).json(products)
-  }catch(e){
+  } catch (e) {
     res.status(201).json([{ msg: "Internal server error" }])
   }
 })
+
+/**
+ * create a product
+ * edit a product
+ */
+
+app.post(
+  "/",
+  body("productName")
+    .isLength({ min: 4 })
+    .withMessage("Title must be longer than 4 characters")
+    .isLength({ max: 30 })
+    .withMessage("Title must be less than 30 characters"),
+  body("productPrice").exists().withMessage("Price cannot be empty"),
+  body("productDescription")
+    .isLength({ min: 10 })
+    .withMessage("Description is too short")
+    .isLength({ max: 300 })
+    .withMessage("Description is too long"),
+  async (req, res) => {
+    const { errors } = validationResult(req)
+    const { productName, productPrice, productDescription } = req.body
+
+    if (errors.length === 0) {
+      const product = await Product.create({
+        productName,
+        productPrice,
+        productDescription,
+      })
+
+      res.json(product)
+    } else {
+      res.status(400).json(errors)
+    }
+  }
+)
 
 module.exports = app
