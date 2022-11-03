@@ -42,11 +42,22 @@ app.put(
     .withMessage("Password must be between 8-20 characters"),
   async (req, res) => {
     const { errors } = validationResult(req)
+    const { firstName, lastName, password } = req.body
 
-    // const hashedPassword = await bcrypt.hash(req.body.password, 10)
+    const hashedPassword = await bcrypt.hash(password, 10)
     const user = req.user
     if (errors.length === 0) {
-      await user.update({ ...user, ...req.body })
+      /**
+       * Not the best method but this does the work
+       * Must change every thing
+       * cant change just the firstname or password
+       */
+      // await user.update({ ...user, ...req.body })
+      await user.update({
+        firstName,
+        lastName,
+        password: hashedPassword,
+      })
       await user.save()
       res.status(201).json(user)
     } else {

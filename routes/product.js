@@ -147,13 +147,21 @@ app.get(
 /**
  * get messages from one user according to the product
  */
+
+/**
+ * Need to work on this method
+ *
+ * Need two routes two get messages
+ * All messages came to the user --> this can be added in the user routes
+ * All the messages that came to a product and filtered by the senderId
+ * --> so we can get the all the messages to a product from a specific user(sender)
+ */
 app.get(
   "/:productId/messages/me",
   passport.authenticate("jwt"),
   checkIfProductExists,
   async (req, res) => {
     const { productId } = req.params
-    console.log(req.user)
 
     const messages = await Message.findAll({
       where: {
@@ -174,7 +182,7 @@ app.get(
  */
 
 app.post(
-  "/:productId/message",
+  "/:productId/messages",
   passport.authenticate("jwt"),
   body("description")
     .exists()
@@ -187,8 +195,8 @@ app.post(
     const message = await Message.create({
       description,
       senderId: req.user.id,
-      receiverId: req.product.userId,
-      productId: req.params.productId,
+      receiverId: req.product.UserId,
+      ProductId: req.params.productId,
     })
 
     res.json(message)
