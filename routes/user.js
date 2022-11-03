@@ -1,8 +1,8 @@
-const express = require('express')
-const { checkIfUserExists } = require('../middlewares/user')
+const express = require("express")
+const { checkIfUserExists } = require("../middlewares/user")
 const app = express()
 
-app.get('/:userId', checkIfUserExists, (req, res) => {
+app.get("/:userId", checkIfUserExists, (req, res) => {
   res.status(201).json(req.user)
 })
 

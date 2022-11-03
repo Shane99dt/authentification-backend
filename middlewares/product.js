@@ -1,4 +1,4 @@
-const { Product } = require('../models')
+const { Product } = require("../models")
 
 const checkIfProductExists = async (req, res, next) => {
   const { productId } = req.params
@@ -6,16 +6,15 @@ const checkIfProductExists = async (req, res, next) => {
   try {
     const product = await Product.findOne({
       where: {
-        id: productId
-      }
+        id: productId,
+      },
     })
 
-    if (product){
+    if (product) {
       req.product = product
       next()
     }
-
-  }catch(e){
+  } catch (e) {
     res.status(500).json([{ msg: "Internal server error" }])
   }
 }

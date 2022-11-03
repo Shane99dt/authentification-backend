@@ -2,7 +2,6 @@ const express = require("express")
 const app = express()
 const { body, validationResult } = require("express-validator")
 const { Message, Product, User } = require("../models")
-const passport = require("../config/passport")
 const moment = require("moment")
 
 app.post(

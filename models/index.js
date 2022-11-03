@@ -1,34 +1,33 @@
-const { Sequelize } = require('sequelize')
+const { Sequelize } = require("sequelize")
 const { DB_HOST, DB_NAME, DB_PASSWORD, DB_USERNAME } = process.env
 
 const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
   host: DB_HOST,
-  dialect : "mysql",
-  logging : false
+  dialect: "mysql",
+  logging: false,
 })
 
-
 const connectDB = async () => {
-  try{
+  try {
     await sequelize.authenticate()
     console.log("DB connected")
-  }catch (e) {
+  } catch (e) {
     console.log(e)
   }
 }
 
 connectDB()
 
-const Product = require('./product')(sequelize)
-const Message = require('./message')(sequelize)
-const Picture = require('./picture')(sequelize)
-const User = require('./user')(sequelize)
+const Product = require("./product")(sequelize)
+const Message = require("./message")(sequelize)
+const Picture = require("./picture")(sequelize)
+const User = require("./user")(sequelize)
 
 Product.belongsToMany(User, {
-  through: "products_users"
+  through: "products_users",
 })
 User.belongsToMany(Product, {
-  through: "products_users"
+  through: "products_users",
 })
 
 sequelize.sync({ alter: true })
@@ -38,7 +37,7 @@ const db = {
   Product,
   Message,
   Picture,
-  User
+  User,
 }
 
 module.exports = db
