@@ -193,18 +193,18 @@ app.get(
 app.post(
   "/:productId/messages",
   passport.authenticate("jwt"),
+  checkIfProductExists,
   body("description")
     .exists()
-    .isLength({ min: 8 })
+    .isLength({ min: 1 })
     .withMessage("Content is require"),
-  checkIfProductExists,
   async (req, res) => {
-    const { description } = req.body
+    const { description, receiverId } = req.body
 
     const message = await Message.create({
       description,
       senderId: req.user.id,
-      receiverId: req.product.UserId,
+      receiverId,
       ProductId: req.params.productId,
     })
 

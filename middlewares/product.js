@@ -2,20 +2,20 @@ const { Product } = require("../models")
 
 const checkIfProductExists = async (req, res, next) => {
   const { productId } = req.params
+  console.log(productId)
 
-  try {
-    const product = await Product.findOne({
-      where: {
-        id: productId,
-      },
-    })
+  const product = await Product.findOne({
+    where: {
+      id: productId,
+    },
+  })
+  console.log(product)
 
-    if (product) {
-      req.product = product
-      next()
-    }
-  } catch (e) {
-    res.status(500).json([{ msg: "Internal server error" }])
+  if (product) {
+    req.product = product
+    next()
+  } else {
+    res.status(404).json([{ msg: "Product not found" }])
   }
 }
 
