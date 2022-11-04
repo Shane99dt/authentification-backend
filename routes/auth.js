@@ -49,7 +49,7 @@ app.post("/login", async (req, res) => {
   })
 
   if (!user) {
-    res.status(404).json([{ msg: "Not found" }])
+    res.status(404).json([{ msg: "User not found" }])
   } else {
     const validPassword = await bcrypt.compare(password, user.password)
     console.log(user)
@@ -60,7 +60,7 @@ app.post("/login", async (req, res) => {
         token,
       })
     } else {
-      res.status(404).json([{ msg: "Not found" }])
+      res.status(404).json([{ msg: "User not found" }])
     }
   }
 })

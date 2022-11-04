@@ -1,4 +1,11 @@
 {
+  "name": "authentification-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
@@ -14,6 +21,7 @@
     "passport-jwt": "^4.0.0",
     "sequelize": "^6.25.3"
   },
+<<<<<<< HEAD
   "name": "authentification-backend",
   "version": "1.0.0",
   "main": "index.js",
@@ -21,6 +29,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
+=======
+>>>>>>> d6496773df6bc99cda21bdf6530f6674842ce32c
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Shane99dt/authentification-backend.git"

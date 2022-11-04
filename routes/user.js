@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt")
 const passport = require("../config/passport")
 const { checkIfUserExists } = require("../middlewares/user")
 const { body, validationResult } = require("express-validator")
+// const { User } = require("../models")
 
 app.get("/", passport.authenticate("jwt"), checkIfUserExists, (req, res) => {
   res.status(201).json(req.user)
@@ -65,5 +66,24 @@ app.put(
     }
   }
 )
+
+/**
+ * Delete a User
+ */
+
+// app.delete(
+//   "/",
+//   passport.authenticate("jwt"),
+//   checkIfUserExists,
+//   async (req, res) => {
+//     await User.destroy({
+//       where: {
+//         id: req.user.id,
+//       },
+//     })
+
+//     res.status(204)
+//   }
+// )
 
 module.exports = app
