@@ -203,4 +203,18 @@ app.post(
   }
 )
 
+/**
+ * Delete a product
+ */
+
+app.delete("/:productId", checkIfProductExists, async (req, res) => {
+  await Product.destroy({
+    where: {
+      id: req.product.id,
+    },
+  })
+
+  res.status(204)
+})
+
 module.exports = app
