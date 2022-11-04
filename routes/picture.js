@@ -21,9 +21,18 @@ const app = express()
 // })
 
 // post the profile image
-app.post("/profile", multer.single("image"), (req, res) => {
-  console.log(req.file)
-  res.send("Profile picture upload success")
+app.post("/profile", multer.single("image"), async (req, res) => {
+  //   console.log(req.file)
+  //   res.send("Profile picture upload success")
+  if (req.uploadError) {
+    res.status(400).json("Upload failed")
+  } else {
+    const picture = await Picture.create({
+      UserId: req.headers.UserId,
+      pictureName: `${process.env.BACKEND_SERVER}/${req.file.filename}`,
+    })
+    res.json(picture)
+  }
 })
 
 // post the product image
