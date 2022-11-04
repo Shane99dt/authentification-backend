@@ -41,8 +41,8 @@ app.post(
         ProductId: req.headers.productId,
         pictureName: `${process.env.BACKEND_SERVER}/${req.file.filename}`,
       })
+      res.json(picture)
     }
-    res.send("Product picture upload success")
   }
 )
 
