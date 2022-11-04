@@ -204,7 +204,7 @@ app.get(
 
 app.post(
   "/:productId/message",
-  // passport.authenticate("jwt"),
+  passport.authenticate("jwt"),
   body("description")
     .exists()
     .isLength({ min: 8 })
