@@ -1,5 +1,7 @@
 const express = require("express")
 const multer = require("multer")
+const passport = require("passport")
+const { Picture } = require("../models")
 
 const app = express()
 
@@ -25,9 +27,23 @@ app.post("/profile", upload.single("image"), (req, res) => {
 })
 
 // post the product image
-app.post("/product", upload.single("image"), (req, res) => {
-  console.log(req.file)
-  res.send("Product picture upload success")
-})
+app.post(
+  "/:id/product",
+  passport.authenticate("jwt"),
+  upload.single("image"),
+  async (req, res) => {
+    const error = multer.MulterError
+    if (error) {
+      res.status(400).json("Upload failed")
+    } else {
+      console.log(req.file)
+      const picture = await Picture.create({
+        ProductId: req.headers.productId,
+        pictureName: `${process.env.BACKEND_SERVER}/${req.file.filename}`,
+      })
+    }
+    res.send("Product picture upload success")
+  }
+)
 
 module.exports = app
