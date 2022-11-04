@@ -12,5 +12,24 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "sequelize": "^6.25.3"
-  }
+  },
+  "name": "authentification-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shane99dt/authentification-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shane99dt/authentification-backend/issues"
+  },
+  "homepage": "https://github.com/Shane99dt/authentification-backend#readme",
+  "description": ""
 }
