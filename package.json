@@ -1,4 +1,11 @@
 {
+  "name": "authentification-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
@@ -12,14 +19,6 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "sequelize": "^6.25.3"
-  },
-  "name": "authentification-backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
   },
   "repository": {
     "type": "git",
