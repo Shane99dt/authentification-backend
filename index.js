@@ -7,6 +7,7 @@ const { PORT } = process.env
 const productRoutes = require("./routes/product")
 const userRoutes = require("./routes/user")
 const authRoutes = require("./routes/auth")
+const pictureRoutes = require("./routes/picture")
 require("./models/index")
 
 app.use(cors())
@@ -23,6 +24,7 @@ app.use(
 app.use("/auth", authRoutes)
 app.use("/product", productRoutes)
 app.use("/user", userRoutes)
+app.use("/picture", pictureRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
