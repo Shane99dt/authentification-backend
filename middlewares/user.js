@@ -1,12 +1,10 @@
 const { User } = require("../models")
 
 const checkIfUserExists = async (req, res, next) => {
-  const { userId } = req.params
-
   try {
     const user = await User.findOne({
       where: {
-        id: userId,
+        id: req.user.id,
       },
     })
 

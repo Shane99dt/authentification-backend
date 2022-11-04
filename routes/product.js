@@ -5,6 +5,7 @@ const { Product, Message } = require("../models")
 const { body, validationResult } = require("express-validator")
 const { checkIfUserExists } = require("../middlewares/user")
 const passport = require("../config/passport")
+const { Op } = require("sequelize")
 
 /**
  * need two different get methods
@@ -56,6 +57,7 @@ app.post(
         productName,
         productPrice,
         productDescription,
+        UserId: req.user.id,
       })
 
       res.status(201).json(product)
@@ -72,6 +74,7 @@ app.post(
 app.put(
   "/:productId",
   passport.authenticate("jwt"),
+  checkIfProductExists,
   body("productName")
     .custom((value) => {
       if (!value) {
@@ -99,7 +102,6 @@ app.put(
       }
     })
     .withMessage("Price cannot be empty"),
-  checkIfProductExists,
   async (req, res) => {
     const { errors } = validationResult(req)
     const product = req.product
@@ -114,53 +116,10 @@ app.put(
   }
 )
 
-/*
- * Messages
- */
-
-// Post a message
-// app.post(
-//   "/:productId/message",
-//   body("description")
-//     .isLength({ min: 1 })
-//     .withMessage("Message cannot be empty")
-//     .isLength({ max: 200 })
-//     .withMessage("Message is too long"),
-//   async (req, res) => {
-//     const { productId } = req.params
-//     const { errors } = validationResult(req)
-
-//     // const product = await Product.findOne({
-//     //   where: {
-//     //     id: productId
-//     //   },
-//     //   include : [User]
-//     // })
-//     const { description, receiverId, senderId } = req.body
-
-//     /**
-//      * need to get the sender id which is the user
-//      *
-//      * the way to do that is to get the token and find a way to decrypt it
-//      * get the id which is encrypted inside the token and its ready
-//      */
-
-//     if (errors.length === 0) {
-//       const message = await Message.create({
-//         description,
-//         date: moment().format(),
-//         receiverId,
-//         senderId,
-//         productId,
-//       })
-//       res.json(message)
-//     } else {
-//       res.status(400).json(errors)
-//     }
-//   }
-// )
-
 /**
+ * Messages
+ *
+ *
  * Get all the messages came to the product from different users
  */
 
@@ -177,33 +136,53 @@ app.get(
       },
     })
 
-    res.status(201).json(messages)
+    if (messages.length > 0) {
+      res.status(201).json(messages)
+    } else {
+      res.status(400).json([{ msg: "No Messages" }])
+    }
   }
 )
 
 /**
  * get messages from one user according to the product
  */
+
+/**
+ * Need to work on this method
+ *
+ * Need two routes two get messages
+ * All messages came to the user --> this can be added in the user routes
+ * All the messages that came to a product and filtered by the senderId
+ * --> so we can get the all the messages to a product from a specific user(sender)
+ */
 app.get(
-  "/:productId/messages/:senderId",
+  "/:productId/messages/me",
   passport.authenticate("jwt"),
   checkIfProductExists,
   async (req, res) => {
-    const { productId, senderId } = req.params
+    const { productId } = req.params
 
     const messages = await Message.findAll({
       where: {
-        productId,
-        senderId,
+        [Op.and]: [{ productId }],
       },
     })
 
-    res.status(201).json(messages)
+    if (messages.length > 0) {
+      res.status(201).json(messages)
+    } else {
+      res.status(400).json([{ msg: "No Messages" }])
+    }
   }
 )
 
+/**
+ * post message according to the product
+ */
+
 app.post(
-  "/:productId/message",
+  "/:productId/messages",
   passport.authenticate("jwt"),
   body("description")
     .exists()
@@ -211,38 +190,13 @@ app.post(
     .withMessage("Content is require"),
   checkIfProductExists,
   async (req, res) => {
-    /**
-     * messages -> productId
-     * messages -> senderId
-     * product receives many messages from different users
-     * need to get all the messages according to the same user to a specific announe
-     *
-     * how to do that
-     *
-     * need to select the messages with a user and the product id
-     *
-     * if we send the productId with the params
-     * it will let us get the every message that came to the product and it will definetely not help us
-     * but we can divide all the messages by the sender id
-     * kinda complicated but thats a way to do that
-     *
-     * if we send the senderId with the params
-     * we can get all the messages sent by that sender
-     *
-     */
-
     const { description } = req.body
-    const product = Product.findOne({
-      where: {
-        id: req.params.productId,
-      },
-    })
 
     const message = await Message.create({
       description,
       senderId: req.user.id,
-      receiverId: product.user.id,
-      productId: req.params.productId,
+      receiverId: req.product.UserId,
+      ProductId: req.params.productId,
     })
 
     res.json(message)

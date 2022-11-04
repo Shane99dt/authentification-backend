@@ -7,11 +7,29 @@
     "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.4",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "sequelize": "^6.25.3"
-  }
+  },
+  "name": "authentification-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shane99dt/authentification-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Shane99dt/authentification-backend/issues"
+  },
+  "homepage": "https://github.com/Shane99dt/authentification-backend#readme",
+  "description": ""
 }
