@@ -3,14 +3,12 @@ const { checkIfProductExists } = require("../middlewares/product")
 const app = express()
 const { Product, Message } = require("../models")
 const { body, validationResult } = require("express-validator")
-const { checkIfUserExists } = require("../middlewares/user")
+const { checkIfSellerExists } = require("../middlewares/user")
 const passport = require("../config/passport")
-const { Op } = require("sequelize")
+// const { Op } = require("sequelize")
+// const { checkIfMessageExists } = require("../middlewares/message")
 
 /**
- * need two different get methods
- *
- * show all the products
  * show one product
  */
 
@@ -18,6 +16,17 @@ app.get("/:productId", checkIfProductExists, (req, res) => {
   res.status(201).json(req.product)
 })
 
+/**
+ * Get the seller
+ */
+
+app.get("/seller/:sellerId", checkIfSellerExists, (req, res) => {
+  res.status(201).json(req.seller)
+})
+
+/**
+ * Get all the products
+ */
 app.get("/", async (req, res) => {
   try {
     /**
@@ -156,26 +165,26 @@ app.get(
  * All the messages that came to a product and filtered by the senderId
  * --> so we can get the all the messages to a product from a specific user(sender)
  */
-app.get(
-  "/:productId/messages/me",
-  passport.authenticate("jwt"),
-  checkIfProductExists,
-  async (req, res) => {
-    const { productId } = req.params
+// app.get(
+//   "/:productId/messages/me",
+//   passport.authenticate("jwt"),
+//   checkIfProductExists,
+//   async (req, res) => {
+//     const { productId } = req.params
 
-    const messages = await Message.findAll({
-      where: {
-        [Op.and]: [{ productId }],
-      },
-    })
+//     const messages = await Message.findAll({
+//       where: {
+//         [Op.and]: [{ productId }],
+//       },
+//     })
 
-    if (messages.length > 0) {
-      res.status(201).json(messages)
-    } else {
-      res.status(400).json([{ msg: "No Messages" }])
-    }
-  }
-)
+//     if (messages.length > 0) {
+//       res.status(201).json(messages)
+//     } else {
+//       res.status(400).json([{ msg: "No Messages" }])
+//     }
+//   }
+// )
 
 /**
  * post message according to the product
@@ -204,6 +213,31 @@ app.post(
 )
 
 /**
+ * reply to the user
+ */
+
+//  app.post(
+//   "/:productId/messagesReply",
+//   passport.authenticate("jwt"),
+//   body("description")
+//     .exists()
+//     .isLength({ min: 8 })
+//     .withMessage("Content is require"),
+//   checkIfProductExists,
+//   async (req, res) => {
+//     const { description } = req.body
+
+//     const message = await Message.create({
+//       description,
+//       senderId: req.user.id,
+//       receiverId: req.product.UserId,
+//       ProductId: req.params.productId,
+//     })
+
+//     res.json(message)
+//   }
+// )
+/**
  * Delete a product
  */
 
@@ -216,5 +250,19 @@ app.delete("/:productId", checkIfProductExists, async (req, res) => {
 
   res.status(204)
 })
+
+/**
+ * Delete a message
+ */
+
+// app.delete("/message/:messageId", checkIfMessageExists, async (req, res) => {
+//   await Message.destroy({
+//     where: {
+//       id: req.message.id,
+//     },
+//   })
+
+//   res.status(204)
+// })
 
 module.exports = app
