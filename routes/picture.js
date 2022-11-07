@@ -22,7 +22,7 @@ const app = express()
 
 // post the profile image
 app.post(
-  "/profile",
+  "/profile/",
   passport.authenticate("jwt"),
   multer.single("image"),
   async (req, res) => {
@@ -40,6 +40,14 @@ app.post(
   }
 )
 
+// app.post("/:id/upload", multer.single("image"), async (req, res) => {
+//   const image = await Picture.create({
+//     UserId: req.params.id,
+//     image_url: `${process.env.BACKEND_SERVER}/${req.file.filename}`,
+//   })
+//   res.json(image)
+// })
+
 // post the product image
 app.post(
   "/:id/product",
@@ -52,7 +60,7 @@ app.post(
     } else {
       console.log(req.file)
       const picture = await Picture.create({
-        ProductId: req.headers.productId,
+        ProductId: req.params.id,
         pictureName: `${process.env.BACKEND_SERVER}/${req.file.filename}`,
       })
       res.json(picture)

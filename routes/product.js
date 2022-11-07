@@ -9,7 +9,39 @@ const passport = require("../config/passport")
 // const { checkIfMessageExists } = require("../middlewares/message")
 
 /**
- * show one product
+ * @All_Routes
+ *
+ * @get_one_product
+ * /:productId
+ *
+ * @get_all_products
+ * /
+ *
+ * @get_all_products_by_a_seller
+ * /sell/:sellerId
+ *
+ * @get_seller
+ * /seller/:sellerId
+ *
+ * @post_a_product
+ * /
+ *
+ * @put_edit_a_product
+ * /
+ *
+ * @delete_a_product
+ * /:productId
+ *
+ * @get_all_the_messages_came_to_a_product
+ * /:productId/messages
+ *
+ * @post_messages_according_to_the_product
+ * /:productId/messages
+ *
+ */
+
+/**
+ * Get one product
  */
 
 app.get("/:productId", checkIfProductExists, (req, res) => {
@@ -35,7 +67,23 @@ app.get("/", async (req, res) => {
     const products = await Product.findAll()
     res.status(201).json(products)
   } catch (e) {
-    res.status(201).json([{ msg: "Internal server error" }])
+    res.status(400).json([{ msg: "Internal server error" }])
+  }
+})
+
+/**
+ * Get all the products by a seller
+ */
+app.get("/sell/:sellerId", checkIfSellerExists, async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        UserId: req.seller.id,
+      },
+    })
+    res.status(201).json(products)
+  } catch (e) {
+    res.status(400).json([{ msg: "Internal server error" }])
   }
 })
 
@@ -124,6 +172,20 @@ app.put(
     }
   }
 )
+
+/**
+ * Delete a product
+ */
+
+app.delete("/:productId", checkIfProductExists, async (req, res) => {
+  await Product.destroy({
+    where: {
+      id: req.product.id,
+    },
+  })
+
+  res.status(204)
+})
 
 /**
  * Messages
@@ -237,20 +299,6 @@ app.post(
 //     res.json(message)
 //   }
 // )
-
-/**
- * Delete a product
- */
-
-app.delete("/:productId", checkIfProductExists, async (req, res) => {
-  await Product.destroy({
-    where: {
-      id: req.product.id,
-    },
-  })
-
-  res.status(204)
-})
 
 /**
  * Delete a message
