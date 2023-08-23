@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt")
 const issueToken = require("../utils/jwt")
 const { User } = require("../models/index")
 const { body, validationResult } = require("express-validator")
+const { userAlreadyExists } = require("../middlewares/user")
 
 const passwordShortMessage = "Password needs to be more than 8 characters"
 const passwordLongMessage = "Password needs to be less than 20 characters"
@@ -18,6 +19,7 @@ app.post(
     .isLength({ max: 20 })
     .withMessage(passwordLongMessage),
   body("email").isEmail().withMessage("Not an email"),
+  userAlreadyExists,
 
   async (req, res) => {
     const { errors } = validationResult(req)
@@ -60,7 +62,7 @@ app.post("/login", async (req, res) => {
         token,
       })
     } else {
-      res.status(404).json([{ msg: "User not found" }])
+      res.status(404).json([{ msg: "Email or password is not correct" }])
     }
   }
 })

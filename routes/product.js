@@ -94,13 +94,13 @@ app.get("/sell/:sellerId", checkIfSellerExists, async (req, res) => {
 app.post(
   "/",
   passport.authenticate("jwt"),
-  body("productName")
+  body("name")
     .isLength({ min: 4 })
     .withMessage("Title is too short")
     .isLength({ max: 30 })
     .withMessage("Title must be less than 30 characters"),
-  body("productPrice").exists().isInt().withMessage("Price cannot be empty"),
-  body("productDescription")
+  body("price").exists().isInt().withMessage("Price cannot be empty"),
+  body("description")
     .isLength({ min: 10 })
     .withMessage("Description is too short")
     .isLength({ max: 300 })

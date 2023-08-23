@@ -2,14 +2,14 @@ const { DataTypes } = require("sequelize")
 
 module.exports = (sequelize) => {
   const Product = sequelize.define("Product", {
-    productName: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    productPrice: {
+    price: {
       type: DataTypes.INTEGER,
     },
-    productDescription: {
+    description: {
       type: DataTypes.TEXT,
     },
   })

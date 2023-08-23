@@ -15,6 +15,20 @@ const checkIfUserExists = async (req, res, next) => {
   }
 }
 
+const userAlreadyExists = async (req, res, next) => {
+  const user = await User.findOne({
+    where: {
+      email: req.body.email,
+    },
+  })
+
+  if (!user) {
+    next()
+  } else {
+    res.status(404).json([{ msg: "User already exists" }])
+  }
+}
+
 const checkIfSellerExists = async (req, res, next) => {
   const { sellerId } = req.params
   const seller = await User.findOne({
@@ -31,4 +45,4 @@ const checkIfSellerExists = async (req, res, next) => {
   }
 }
 
-module.exports = { checkIfUserExists, checkIfSellerExists }
+module.exports = { checkIfUserExists, checkIfSellerExists, userAlreadyExists }
