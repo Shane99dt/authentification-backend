@@ -107,13 +107,13 @@ app.post(
     .withMessage("Description is too long"),
   async (req, res) => {
     const { errors } = validationResult(req)
-    const { productName, productPrice, productDescription } = req.body
+    const { name, price, description } = req.body
 
     if (errors.length === 0) {
       const product = await Product.create({
-        productName,
-        productPrice,
-        productDescription,
+        name,
+        price,
+        description,
         UserId: req.user.id,
       })
 
