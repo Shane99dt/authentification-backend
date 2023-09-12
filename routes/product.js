@@ -184,7 +184,7 @@ app.delete("/:productId", checkIfProductExists, async (req, res) => {
     },
   })
 
-  res.status(204)
+  res.status(204).json("Successfully deleted")
 })
 
 /**
@@ -261,12 +261,12 @@ app.post(
     .isLength({ min: 1 })
     .withMessage("Content is require"),
   async (req, res) => {
-    const { description, receiverId } = req.body
+    const { description } = req.body
 
     const message = await Message.create({
       description,
       senderId: req.user.id,
-      receiverId,
+      receiverId: req.product.UserId,
       ProductId: req.params.productId,
     })
 
